@@ -5,35 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Главная</title>
 
+  <!-- Подключаем манифест -->
+  <link rel="manifest" href="manifest_main.json">
+
   <style>
-    body {
+    html, body {
       margin: 0;
-      background: #f2f2f2;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-family: sans-serif;
+      padding: 0;
+      height: 100%;
     }
 
-    /* Блок с фоном */
-    .bg-link {
-      width: 300px;
-      height: 200px;
-      border-radius: 15px;
-      overflow: hidden;
-      position: relative;
-
-      background-image: url("main_bg.png"); /* ← твоя картинка */
+    .full-bg {
+      width: 100%;
+      height: 100%;
+      background-image: url("main_bg.jpg"); /* твоя картинка */
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-
       cursor: pointer;
+      position: relative;
     }
 
-    /* Кликаемая область */
-    .bg-link a {
+    .full-bg a {
       position: absolute;
       inset: 0;
       display: block;
@@ -41,10 +34,8 @@
   </style>
 </head>
 <body>
-
-  <div class="bg-link">
-    <a href="index.html"></a>
+  <div class="full-bg">
+    <a href="index.html"></a> <!-- куда перебрасывать -->
   </div>
-
 </body>
 </html>
