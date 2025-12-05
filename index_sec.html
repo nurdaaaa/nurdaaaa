@@ -12,14 +12,33 @@ html, body { margin:0; padding:0; height:100%; }
   background-image: url("third.png");
   background-size: cover;
   background-position: center;
-  cursor:pointer; position:relative;
+  position:relative;
+  cursor:pointer;
 }
-.full-bg a { position:absolute; inset:0; display:block; }
+
+/* Верхняя зона для первого сайта */
+.click-first {
+  position:absolute;
+  top: 0; /* здесь начало зоны сверху */
+  height: 1200px; /* высота зоны для первого сайта, можешь менять */
+  width:100%;
+  display:block;
+}
+
+/* Остальная зона для второго сайта */
+.click-second {
+  position:absolute;
+  top: 1200px; /* здесь начинается зона второго сайта (должна совпадать с bottom первого) */
+  bottom:0;
+  width:100%;
+  display:block;
+}
 </style>
 </head>
 <body>
 <div class="full-bg">
-  <a href="index.html"></a>
+  <a href="https://site1.com" class="click-first"></a>
+  <a href="https://site2.com" class="click-second"></a>
 </div>
 </body>
 </html>
