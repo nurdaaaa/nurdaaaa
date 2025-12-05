@@ -1,39 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // --- Tabs ---
-  const tabBtn1 = document.getElementById("tab-btn-1");
-  const tabBtn2 = document.getElementById("tab-btn-2");
-  const doc = document.getElementById("doc");
-  const req = document.getElementById("req");
-
-  function updateTabs() {
-    if (tabBtn1.checked) {
-      doc.classList.add("active");
-      req.classList.remove("active");
-      const saved = localStorage.getItem("driverImage");
-      if (saved) showImage(saved);
-      else resetPreview();
-    } else {
-      req.classList.add("active");
-      doc.classList.remove("active");
-      resetPreview();
-    }
-  }
-
-  tabBtn1.addEventListener("change", updateTabs);
-  tabBtn2.addEventListener("change", updateTabs);
-  tabBtn1.checked = true;
-  updateTabs();
-
-  // --- Image Upload ---
   const input = document.getElementById("driverUpload");
   const preview = document.getElementById("preview");
   const label = document.getElementById("upload-label");
 
+  // Показ изображения
   function showImage(src) {
-    const img = document.createElement("img");
+    let img = preview.querySelector("img");
+    if (!img) {
+      img = document.createElement("img");
+      preview.appendChild(img);
+    }
     img.src = src;
-    preview.innerHTML = "";
-    preview.appendChild(img);
+    img.style.transform = "translate(0px,0px) scale(1)";
     label.style.display = "none";
   }
 
@@ -42,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     label.style.display = "inline-block";
   }
 
+  // Загрузка изображения
   input.addEventListener("change", function () {
     const file = this.files[0];
     if (!file) return;
@@ -54,53 +33,47 @@ document.addEventListener("DOMContentLoaded", () => {
     reader.readAsDataURL(file);
   });
 
-  // --- Rekvizits ---
-  const rekvizits = ["driverName","driverNumber","driverDOB","driverIssued","driverExpiry"];
-  rekvizits.forEach(id => {
-    const el = document.getElementById(id);
-    const saved = localStorage.getItem(id);
-    if(saved) el.value = saved;
-    el.addEventListener("input", () => {
-      localStorage.setItem(id, el.value);
-    });
-  });
+  // Восстановление при перезагрузке
+  const saved = localStorage.getItem("driverImage");
+  if(saved) showImage(saved);
 
-  // --- QR Modal ---
-  const openBtn = document.getElementById('btnShowQR');
-  const overlay = document.getElementById('qrOverlay');
-  const closeBtn = document.getElementById('qrClose');
-  const backdrop = document.getElementById('qrBackdrop');
+  // --- Touch pinch-zoom & drag ---
+  let startDistance = 0, currentScale = 1, startX = 0, startY = 0, currentX = 0, currentY = 0, isPanning = false;
+  preview.addEventListener("touchstart", function(e) {
+    const img = preview.querySelector("img");
+    if(!img) return;
+    if(e.touches.length === 2){
+      startDistance = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      isPanning = false;
+    } else if(e.touches.length === 1 && currentScale > 1){
+      isPanning = true;
+      startX = e.touches[0].clientX - currentX;
+      startY = e.touches[0].clientY - currentY;
+    }
+  }, {passive: false});
 
-  function openModal() {
-    overlay.classList.add('open');
-    overlay.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeModal() {
-    overlay.classList.remove('open');
-    overlay.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
+  preview.addEventListener("touchmove", function(e){
+    const img = preview.querySelector("img");
+    if(!img) return;
+    e.preventDefault();
+    if(e.touches.length === 2){
+      const newDistance = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      const scaleChange = newDistance / startDistance;
+      let newScale = currentScale * scaleChange;
+      if(newScale < 1) newScale = 1;
+      img.style.transform = `translate(${currentX}px,${currentY}px) scale(${newScale})`;
+    } else if(e.touches.length === 1 && isPanning){
+      currentX = e.touches[0].clientX - startX;
+      currentY = e.touches[0].clientY - startY;
+      img.style.transform = `translate(${currentX}px,${currentY}px) scale(${currentScale})`;
+    }
+  }, {passive: false});
 
-  openBtn.addEventListener('click', openModal);
-  closeBtn.addEventListener('click', closeModal);
-  backdrop.addEventListener('click', closeModal);
-  overlay.addEventListener('click', e => { if(e.target === overlay) closeModal(); });
-  document.addEventListener('keydown', e => { if(e.key === 'Escape' && overlay.classList.contains('open')) closeModal(); });
-
-  // --- Share buttons ---
-  document.getElementById("btnShare").addEventListener("click", async () => {
-    if(navigator.share){
-      try{ await navigator.share({ title:"Водительское удостоверение", url: window.location.href }); }
-      catch(err){ console.log(err); }
-    } else alert("Ваш браузер не поддерживает системное меню поделиться");
-  });
-
-  document.getElementById("btnShareRekv").addEventListener("click", async () => {
-    if(navigator.share){
-      const rekvData = rekvizits.map(id => document.getElementById(id).value).join("\n");
-      try{ await navigator.share({ title:"Реквизиты ВУ", text: rekvData }); }
-      catch(err){ console.log(err); }
-    } else alert("Ваш браузер не поддерживает системное меню поделиться");
+  preview.addEventListener("touchend", function(e){
+    const img = preview.querySelector("img");
+    if(!img) return;
+    const style = window.getComputedStyle(img);
+    const matrix = new WebKitCSSMatrix(style.transform);
+    currentScale = Math.max(matrix.a,1);
   });
 });
