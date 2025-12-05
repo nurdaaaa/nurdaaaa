@@ -1,43 +1,50 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
-  <title>Kaspi.kz</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Главная</title>
+
   <style>
-    .bg-box {
+    body {
+      margin: 0;
+      background: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: sans-serif;
+    }
+
+    /* Блок с фоном */
+    .bg-link {
       width: 300px;
       height: 200px;
+      border-radius: 15px;
+      overflow: hidden;
+      position: relative;
 
-      /* ваша картинка как фон */
-      background-image: url("main_bg.png");
+      background-image: url("main_bg.jpg"); /* ← твоя картинка */
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
 
-      position: relative;
-      border-radius: 12px;
-      overflow: hidden;
+      cursor: pointer;
     }
 
-    /* прозрачная кликабельная ссылка поверх блока */
-    .bg-box a {
+    /* Кликаемая область */
+    .bg-link a {
       position: absolute;
-      inset: 0; /* растянуть на весь блок */
+      inset: 0;
       display: block;
-      text-decoration: none;
     }
   </style>
 </head>
-
 <body>
 
-  <div class="bg-box">
-    <a href="https://nurdaaaa.github.io/nurdaaaa/index" target="_blank"></a>
+  <div class="bg-link">
+    <a href="index.html"></a>
   </div>
 
 </body>
-</html>s="card">
-    <!-- Обернём картинку в ссылку: при клике откроется целевой сайт -->
-    <a href="https://target.example.com" target="_blank" rel="noopener noreferrer" title="Открыть сайт в новой вкладке">
-      <!-- Замените IMAGE_URL на адрес вашей к_
+</html>
