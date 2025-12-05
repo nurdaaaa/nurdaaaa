@@ -34,73 +34,38 @@
       height: 18px !important;
       width: 22px !important;
     }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
   </style>
 </head>
-<!-- START: modal for QR -->
-<div id="qrOverlay" class="qr-overlay" aria-hidden="true">
-  <div class="qr-backdrop" id="qrBackdrop"></div>
-
-  <div class="qr-sheet" role="dialog" aria-modal="true" aria-label="Водительское удостоверение">
-    <button class="qr-close" id="qrClose" aria-label="Закрыть">&times;</button>
-
-    <div class="qr-sheet-header">
-      <h2>Водительское удостоверение</h2>
-    </div>
-
-    <div class="qr-sheet-body">
-      <p class="qr-instruction">Покажите QR-код сотруднику</p>
-
-      <div class="qr-image-wrap">
-        <img src="./qroo.jpg" alt="QR-код" class="qr-image">
-      </div>
-
-      <p class="qr-or">или скажите код</p>
-      <p class="qr-code">080824</p>
-    </div>
-  </div>
-</div>
-<!-- END: modal for QR -->
-
-<script>
-(function(){
-  const openBtn = document.querySelector('#btnftr1');
-  const overlay = document.getElementById('qrOverlay');
-  const closeBtn = document.getElementById('qrClose');
-  const backdrop = document.getElementById('qrBackdrop');
-
-  if (!openBtn || !overlay) return;
-
-  function openModal() {
-    overlay.classList.add('open');
-    overlay.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeModal() {
-    overlay.classList.remove('open');
-    overlay.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
-
-  openBtn.addEventListener('click', function(e){
-    e.preventDefault();
-    openModal();
-  });
-
-  closeBtn.addEventListener('click', closeModal);
-  backdrop.addEventListener('click', closeModal);
-  overlay.addEventListener('click', function(e){
-    if (e.target === overlay) closeModal();
-  });
-  document.addEventListener('keydown', function(e){
-    if (e.key === 'Escape' && overlay.classList.contains('open')) {
-      closeModal();
-    }
-  });
-})();
-</script>
 
 <body>
+  <!-- START: modal for QR -->
+  <div id="qrOverlay" class="qr-overlay" aria-hidden="true">
+    <div class="qr-backdrop" id="qrBackdrop"></div>
+
+    <div class="qr-sheet" role="dialog" aria-modal="true" aria-label="Водительское удостоверение">
+      <button class="qr-close" id="qrClose" aria-label="Закрыть">&times;</button>
+
+      <div class="qr-sheet-header">
+        <h2>Водительское удостоверение</h2>
+      </div>
+
+      <div class="qr-sheet-body">
+        <p class="qr-instruction">Покажите QR-код сотруднику</p>
+
+        <div class="qr-image-wrap">
+          <img src="./qroo.jpg" alt="QR-код" class="qr-image">
+        </div>
+
+        <p class="qr-or">или скажите код</p>
+        <p class="qr-code">080824</p>
+      </div>
+    </div>
+  </div>
+  <!-- END: modal for QR -->
+
   <div class="container">
     <div class="header">
       <div class="title">
@@ -141,7 +106,6 @@
               <img src="upload.png" alt="" class="uploadbtn" />
               Отправить документ
             </button>
-
           </div>
         </div>
       </div>
@@ -176,16 +140,16 @@
         </li>
       </ul>
 
-        <div class="footer">
-          <div class="btnfooter" id="docbtn" style="margin-bottom: 150px; margin-top: -150px;">
-            <button id="btnftr2" class="share" style="margin-left: auto;">
-              <img src="upload.png" alt="" class="uploadbtn" />
-              Отправить реквизиты
-            </button>
-          </div>
+      <div class="footer">
+        <div class="btnfooter" id="docbtn" style="margin-bottom: 150px; margin-top: -150px;">
+          <button id="btnftr2" class="share" style="margin-left: auto;">
+            <img src="upload.png" alt="" class="uploadbtn" />
+            Отправить реквизиты
+          </button>
         </div>
       </div>
     </div>
+  </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -210,7 +174,7 @@
           doc.classList.add("active");
           req.classList.remove("active");
 
-          const saved = localStorage.getItem("uploadedImage");
+          const saved = localStorage.getItem("driver_uploadedImage");
           if (saved) {
             showImage(saved);
           } else {
@@ -238,150 +202,144 @@
         const reader = new FileReader();
         reader.onload = function (e) {
           const src = e.target.result;
-          localStorage.setItem("uploadedImage", src);
+          localStorage.setItem("driver_uploadedImage", src);
           showImage(src);
         };
         reader.readAsDataURL(file);
       });
-            // сохранить реквизиты в localStorage
+
+      // сохранить реквизиты в localStorage
       const rekvizitInputs = document.querySelectorAll('.rekvizit input');
       rekvizitInputs.forEach((input, index) => {
-        const saved = localStorage.getItem('rekvizit' + index);
+        const saved = localStorage.getItem('driver_rekvizit' + index);
         if (saved) input.value = saved;
 
         input.addEventListener('input', () => {
-          localStorage.setItem('rekvizit' + index, input.value);
+          localStorage.setItem('driver_rekvizit' + index, input.value);
         });
       });
-
     });
+
+    // touch-zoom
     let startDistance = 0;
-let currentScale = 1;
-let startX = 0;
-let startY = 0;
-let currentX = 0;
-let currentY = 0;
-let isPanning = false;
-let lastScaleChange = 1;
+    let currentScale = 1;
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let isPanning = false;
+    let lastScaleChange = 1;
 
-preview.addEventListener("touchstart", function(e) {
-  const img = preview.querySelector("img");
-  if (!img) return;
+    const preview = document.getElementById("preview");
 
-  if (e.touches.length === 2) {
-    // Пинч-зум
-    startDistance = Math.hypot(
-      e.touches[0].clientX - e.touches[1].clientX,
-      e.touches[0].clientY - e.touches[1].clientY
-    );
-    lastScaleChange = 1;
-    isPanning = false;
-  } else if (e.touches.length === 1 && currentScale > 1) {
-    // Панорамирование
-    isPanning = true;
-    startX = e.touches[0].clientX - currentX;
-    startY = e.touches[0].clientY - currentY;
-  }
-}, { passive: false });
+    preview.addEventListener("touchstart", function(e) {
+      const img = preview.querySelector("img");
+      if (!img) return;
 
-preview.addEventListener("touchmove", function(e) {
-  const img = preview.querySelector("img");
-  if (!img) return;
-  e.preventDefault();
+      if (e.touches.length === 2) {
+        startDistance = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        lastScaleChange = 1;
+        isPanning = false;
+      } else if (e.touches.length === 1 && currentScale > 1) {
+        isPanning = true;
+        startX = e.touches[0].clientX - currentX;
+        startY = e.touches[0].clientY - currentY;
+      }
+    }, { passive: false });
 
-  if (e.touches.length === 2) {
-    // Пинч
-    const newDistance = Math.hypot(
-      e.touches[0].clientX - e.touches[1].clientX,
-      e.touches[0].clientY - e.touches[1].clientY
-    );
-    const scaleChange = newDistance / startDistance;
-    let newScale = currentScale * scaleChange;
+    preview.addEventListener("touchmove", function(e) {
+      const img = preview.querySelector("img");
+      if (!img) return;
+      e.preventDefault();
 
-    // Не даем уменьшиться меньше 1
-    if (newScale < 1) newScale = 1;
+      if (e.touches.length === 2) {
+        const newDistance = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        const scaleChange = newDistance / startDistance;
+        let newScale = currentScale * scaleChange;
+        if (newScale < 1) newScale = 1;
 
-    img.style.transform = `translate(${currentX}px, ${currentY}px) scale(${newScale})`;
-    lastScaleChange = scaleChange;
-  } else if (e.touches.length === 1 && isPanning) {
-    // Перемещение
-    currentX = e.touches[0].clientX - startX;
-    currentY = e.touches[0].clientY - startY;
-    img.style.transform = `translate(${currentX}px, ${currentY}px) scale(${currentScale})`;
-  }
-}, { passive: false });
+        img.style.transform = `translate(${currentX}px, ${currentY}px) scale(${newScale})`;
+        lastScaleChange = scaleChange;
+      } else if (e.touches.length === 1 && isPanning) {
+        currentX = e.touches[0].clientX - startX;
+        currentY = e.touches[0].clientY - startY;
+        img.style.transform = `translate(${currentX}px, ${currentY}px) scale(${currentScale})`;
+      }
+    }, { passive: false });
 
-preview.addEventListener("touchend", function(e) {
-  const img = preview.querySelector("img");
-  if (!img) return;
+    preview.addEventListener("touchend", function(e) {
+      const img = preview.querySelector("img");
+      if (!img) return;
 
-  if (e.touches.length < 2) {
-    // Фиксируем масштаб после пинча
-    const style = window.getComputedStyle(img);
-    const matrix = new WebKitCSSMatrix(style.transform);
-    currentScale = Math.max(matrix.a, 1); // минимум 1
-  }
-});
+      if (e.touches.length < 2) {
+        const style = window.getComputedStyle(img);
+        const matrix = new WebKitCSSMatrix(style.transform);
+        currentScale = Math.max(matrix.a, 1);
+      }
+    });
 
-// QR modal open/close
-(function(){
-  const openBtn = document.querySelector('#btnftr1');
-  const overlay = document.getElementById('qrOverlay');
-  const closeBtn = document.getElementById('qrClose');
-  const backdrop = document.getElementById('qrBackdrop');
+    // QR modal open/close
+    (function(){
+      const openBtn = document.querySelector('#btnftr1');
+      const overlay = document.getElementById('qrOverlay');
+      const closeBtn = document.getElementById('qrClose');
+      const backdrop = document.getElementById('qrBackdrop');
 
-  if (!openBtn || !overlay) return;
+      if (!openBtn || !overlay) return;
 
-  function openModal() {
-    overlay.classList.add('open');
-    overlay.setAttribute('aria-hidden', 'false');
-    // блокируем прокрутку страницы когда открыт модал
-    document.body.style.overflow = 'hidden';
-  }
+      function openModal() {
+        overlay.classList.add('open');
+        overlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
 
-  function closeModal() {
-    overlay.classList.remove('open');
-    overlay.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
+      function closeModal() {
+        overlay.classList.remove('open');
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
 
-  openBtn.addEventListener('click', function(e){
-    e.preventDefault();
-    openModal();
-  });
-
-  closeBtn.addEventListener('click', closeModal);
-  backdrop.addEventListener('click', closeModal);
-
-  // клик по области вне .qr-sheet также закрывает: делаем делегирование
-  overlay.addEventListener('click', function(e){
-    if (e.target === overlay) closeModal();
-  });
-
-  // Esc закрывает
-  document.addEventListener('keydown', function(e){
-    if (e.key === 'Escape' && overlay.classList.contains('open')) {
-      closeModal();
-    }
-  });
-})();
-
-document.getElementById("btnftr2").addEventListener("click", async () => {
-  if (navigator.share) {
-    try {
-      await navigator.share({
-        title: "Мой сайт",
-        text: "Посмотри это!",
-        url: window.location.href
+      openBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        openModal();
       });
-      console.log("Успешно поделились");
-    } catch (err) {
-      console.log("Ошибка или отмена", err);
-    }
-  } else {
-    alert("Ваш браузер не поддерживает системное меню поделиться");
-  }
-});
-</script>
+
+      closeBtn.addEventListener('click', closeModal);
+      backdrop.addEventListener('click', closeModal);
+      overlay.addEventListener('click', function(e){
+        if (e.target === overlay) closeModal();
+      });
+
+      document.addEventListener('keydown', function(e){
+        if (e.key === 'Escape' && overlay.classList.contains('open')) {
+          closeModal();
+        }
+      });
+    })();
+
+    // Share
+    document.getElementById("btnftr2").addEventListener("click", async () => {
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: "Водительское удостоверение",
+            text: "Посмотри это!",
+            url: window.location.href
+          });
+          console.log("Успешно поделились");
+        } catch (err) {
+          console.log("Ошибка или отмена", err);
+        }
+      } else {
+        alert("Ваш браузер не поддерживает системное меню поделиться");
+      }
+    });
+  </script>
 </body>
 </html>
