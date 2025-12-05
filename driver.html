@@ -1,71 +1,66 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Водительское удостоверение</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="manifest" href="manifest_dr.json">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+<title>Водительское удостоверение</title>
+<link rel="stylesheet" href="style_d.css" />
+<link rel="manifest" href="manifest_d.json">
+<style>
+  #preview {
+    margin: -50px 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 60vh;
+    overflow: hidden;
+    touch-action: none;
+    position: relative;
+  }
+  .zoomable-image {
+    max-width: none;
+    max-height: none;
+    border-radius: 12px;
+    touch-action: none;
+    user-select: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform-origin: 0 0;
+  }
+  .copy-icon {
+    height: 18px !important;
+    width: 22px !important;
+  }
+</style>
 </head>
-   <style>
-    #preview {
-      margin: -50px 0 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      max-height: 60vh;
-      overflow: hidden;
-      touch-action: none;
-      position: relative;
-    }
-
-    .zoomable-image {
-      max-width: none;
-      max-height: none;
-      border-radius: 12px;
-      touch-action: none;
-      user-select: none;
-      position: absolute;
-      left: 0;
-      top: 0;
-      transform-origin: 0 0;
-    }
-
-    .copy-icon {
-      height: 18px !important;
-      width: 22px !important;
-    }
-  </style>
 
 <body>
+<!-- START: modal for QR -->
 <div id="qrOverlay" class="qr-overlay" aria-hidden="true">
   <div class="qr-backdrop" id="qrBackdrop"></div>
-
-  <div class="qr-sheet" role="dialog" aria-modal="true" aria-label="Удостоверение личности">
+  <div class="qr-sheet" role="dialog" aria-modal="true" aria-label="Водительское удостоверение">
     <button class="qr-close" id="qrClose" aria-label="Закрыть">&times;</button>
-
     <div class="qr-sheet-header">
-      <h2>Удостоверение личности</h2>
+      <h2>Водительские права</h2>
     </div>
-
     <div class="qr-sheet-body">
       <p class="qr-instruction">Покажите QR-код сотруднику</p>
-
       <div class="qr-image-wrap">
         <img src="./qroo.jpg" alt="QR-код" class="qr-image">
       </div>
-
       <p class="qr-or">или скажите код</p>
       <p class="qr-code">080824</p>
     </div>
   </div>
 </div>
-  
+<!-- END: modal for QR -->
+
 <div class="container">
   <div class="header">
     <div class="title">
       <img src="arrow.png" alt="" class="back-icon" />
-      <h1 class="text-title">Водительское удостоверение</h1>
+      <h1 class="text-title">Водительские удостоверение</h1>
     </div>
     <div class="tab">
       <div class="btntab">
@@ -80,19 +75,15 @@
   <div id="doc" class="tab-content active">
     <div class="middle">
       <div class="img-upload">
-        <div id="upload-container">
-          <input type="file" id="driverUpload" accept="image/*" style="display: none;" />
-          <label for="driverUpload" id="upload-label">Загрузить</label>
-          <div id="preview"></div>
-        </div>
+        <div id="preview" style="display: flex; justify-content: center;"></div>
       </div>
 
       <div class="footer">
-        <div class="btnfooter">
-          <button id="btnShowQR">
+        <div class="btnfooter" id="docbtn">
+          <button id="btnftr1">
             <img src="qr.png" alt="" class="qrbtn" /> Предъявить документ
           </button>
-          <button id="btnShare" class="share">
+          <button id="btnftr2" class="share" style="margin-bottom: 20px;">
             <img src="upload.png" alt="" class="uploadbtn" /> Отправить документ
           </button>
         </div>
@@ -104,34 +95,34 @@
     <ul class="rekvizit">
       <li>
         <span class="atritem">ФИО</span>
-        <input type="text" maxlength="32" class="rekitem" id="driverName" />
+        <input type="text" maxlength="32" spellcheck="false" class="rekitem" id="1" style="margin-right: 25px;"/>
         <img src="copy.png" alt="" class="copy-icon" />
       </li>
       <li>
         <span class="atritem">ИИН</span>
-        <input type="text" maxlength="12" class="rekitem" id="driverNumber" />
+        <input type="text" maxlength="12" spellcheck="false" class="rekitem" id="2" style="margin-right: 25px;"/>
         <img src="copy.png" alt="" class="copy-icon" />
       </li>
       <li>
         <span class="atritem">Номер документа</span>
-        <input type="text" maxlength="10" class="rekitem" id="driverDOB" />
+        <input type="text" maxlength="9" spellcheck="false" class="rekitem" id="4" style="margin-right: 25px;">
         <img src="copy.png" alt="" class="copy-icon" />
       </li>
       <li>
         <span class="atritem">Дата выдачи</span>
-        <input type="text" maxlength="10" class="rekitem" id="driverIssued" />
+        <input type="text" maxlength="10" spellcheck="false" class="rekitem" id="5" style="margin-right: 25px;">
         <img src="copy.png" alt="" class="copy-icon" />
       </li>
       <li>
         <span class="atritem">Срок действия</span>
-        <input type="text" maxlength="10" class="rekitem" id="driverExpiry" />
+        <input type="text" maxlength="10" spellcheck="false" class="rekitem" id="6" style="margin-right: 25px;">
         <img src="copy.png" alt="" class="copy-icon" />
       </li>
     </ul>
 
     <div class="footer">
-      <div class="btnfooter">
-        <button id="btnShareRekv" class="share">
+      <div class="btnfooter" id="docbtn" style="margin-bottom: 150px; margin-top: -150px;">
+        <button id="btnftr2" class="share" style="margin-left: auto;">
           <img src="upload.png" alt="" class="uploadbtn" /> Отправить реквизиты
         </button>
       </div>
@@ -139,6 +130,94 @@
   </div>
 </div>
 
-<script src="script.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const preview = document.getElementById("preview");
+  const tabBtn1 = document.getElementById("tab-btn-1");
+  const tabBtn2 = document.getElementById("tab-btn-2");
+  const doc = document.getElementById("doc");
+  const req = document.getElementById("req");
+
+  // Автозагрузка фото из файла
+  function showImage(src) {
+    const img = document.createElement("img");
+    img.src = src;
+    img.classList.add("zoomable-image");
+    preview.innerHTML = "";
+    preview.appendChild(img);
+  }
+
+  // Загружаем фото автоматически
+  showImage("./driver_license.png");
+
+  function updateTabs() {
+    if (tabBtn1.checked) {
+      doc.classList.add("active");
+      req.classList.remove("active");
+      preview.style.display = "flex";
+    } else {
+      req.classList.add("active");
+      doc.classList.remove("active");
+      preview.style.display = "none";
+    }
+  }
+
+  tabBtn1.addEventListener("change", updateTabs);
+  tabBtn2.addEventListener("change", updateTabs);
+  tabBtn1.checked = true;
+  updateTabs();
+
+  // Сохраняем реквизиты в localStorage
+  const rekvizitInputs = document.querySelectorAll('.rekvizit input');
+  rekvizitInputs.forEach((input, index) => {
+    const saved = localStorage.getItem('rekvizit' + index);
+    if (saved) input.value = saved;
+    input.addEventListener('input', () => {
+      localStorage.setItem('rekvizit' + index, input.value);
+    });
+  });
+
+  // QR modal open/close
+  const openBtn = document.querySelector('#btnftr1');
+  const overlay = document.getElementById('qrOverlay');
+  const closeBtn = document.getElementById('qrClose');
+  const backdrop = document.getElementById('qrBackdrop');
+
+  function openModal() {
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  openBtn.addEventListener('click', e => { e.preventDefault(); openModal(); });
+  closeBtn.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', closeModal);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal(); });
+
+  // Share кнопка
+  document.getElementById("btnftr2").addEventListener("click", async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Водительское удостоверение",
+          text: "Посмотри это!",
+          url: window.location.href
+        });
+      } catch (err) {
+        console.log("Ошибка или отмена", err);
+      }
+    } else {
+      alert("Ваш браузер не поддерживает системное меню поделиться");
+    }
+  });
+});
+</script>
 </body>
 </html>
