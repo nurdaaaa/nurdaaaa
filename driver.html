@@ -7,27 +7,60 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="manifest" href="manifest.json">
 </head>
+   <style>
+    #preview {
+      margin: -50px 0 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-height: 60vh;
+      overflow: hidden;
+      touch-action: none;
+      position: relative;
+    }
+
+    .zoomable-image {
+      max-width: none;
+      max-height: none;
+      border-radius: 12px;
+      touch-action: none;
+      user-select: none;
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform-origin: 0 0;
+    }
+
+    .copy-icon {
+      height: 18px !important;
+      width: 22px !important;
+    }
+  </style>
 
 <body>
-<!-- QR Modal -->
 <div id="qrOverlay" class="qr-overlay" aria-hidden="true">
   <div class="qr-backdrop" id="qrBackdrop"></div>
-  <div class="qr-sheet" role="dialog" aria-modal="true" aria-label="Водительское удостоверение">
+
+  <div class="qr-sheet" role="dialog" aria-modal="true" aria-label="Удостоверение личности">
     <button class="qr-close" id="qrClose" aria-label="Закрыть">&times;</button>
+
     <div class="qr-sheet-header">
-      <h2>Водительское удостоверение</h2>
+      <h2>Удостоверение личности</h2>
     </div>
+
     <div class="qr-sheet-body">
       <p class="qr-instruction">Покажите QR-код сотруднику</p>
+
       <div class="qr-image-wrap">
         <img src="./qroo.jpg" alt="QR-код" class="qr-image">
       </div>
+
       <p class="qr-or">или скажите код</p>
       <p class="qr-code">080824</p>
     </div>
   </div>
 </div>
-
+  
 <div class="container">
   <div class="header">
     <div class="title">
@@ -75,12 +108,12 @@
         <img src="copy.png" alt="" class="copy-icon" />
       </li>
       <li>
-        <span class="atritem">Номер прав</span>
+        <span class="atritem">ИИН</span>
         <input type="text" maxlength="12" class="rekitem" id="driverNumber" />
         <img src="copy.png" alt="" class="copy-icon" />
       </li>
       <li>
-        <span class="atritem">Дата рождения</span>
+        <span class="atritem">Номер документа</span>
         <input type="text" maxlength="10" class="rekitem" id="driverDOB" />
         <img src="copy.png" alt="" class="copy-icon" />
       </li>
