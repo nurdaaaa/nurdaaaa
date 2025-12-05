@@ -1,41 +1,25 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Главная</title>
-
-  <!-- Подключаем манифест -->
-  <link rel="manifest" href="manifest_main.json">
-
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-    }
-
-    .full-bg {
-      width: 100%;
-      height: 100%;
-      background-image: url("main_bg.png"); /* твоя картинка */
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      cursor: pointer;
-      position: relative;
-    }
-
-    .full-bg a {
-      position: absolute;
-      inset: 0;
-      display: block;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaspi.kz</title>
+<link rel="manifest" href="manifest_main.json">
+<style>
+html, body { margin:0; padding:0; height:100%; }
+.full-bg {
+  width:100%; height:100%;
+  background-image: url("main_bg.png");
+  background-size: cover;
+  background-position: center;
+  cursor:pointer; position:relative;
+}
+.full-bg a { position:absolute; inset:0; display:block; }
+</style>
 </head>
 <body>
-  <div class="full-bg">
-    <a href="index.html"></a> <!-- куда перебрасывать -->
-  </div>
+<div class="full-bg">
+  <a href="index.html"></a>
+</div>
 </body>
 </html>
